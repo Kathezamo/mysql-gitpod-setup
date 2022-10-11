@@ -1,0 +1,92 @@
+CREATE DATABASE Proyect_PartII;
+USE Proyect_PartII;
+
+CREATE TABLE Courses (CourseID INT NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT, 
+  Class_format Varchar (50) NOT NULL, 
+  StartAndEndDate DATE NOT NULL,
+  Schedule DATE NOT NULL , 
+  Perequisities Varchar(50) NOT NULL,
+  fee DECIMAL (6, 2) NOT NULL,
+  numCredit Varchar (2) NOT NULL,
+  Registration Varchar(16) NOT NULL,
+  CourseTitle Varchar(50) NOT NULL,
+);
+
+INSERT INTO Courses (CourseID, Class_format, StartAndEndDate, Schedule, Prerequisities, fee, numCredit, Registrationdeadline, CourseTitle) VALUES ('45196', 'Hybrid', '2022-05-01 2022-25-04', 'M & T 6-9', 'Linguistic Fundamentals', '$800', '3.00', '13-12-2021', 'Applied linguistics');
+INSERT INTO Courses (CourseID, Class_format, StartAndEndDate, Schedule, Perequisities, fee, numCredit, Registrationdeadline, CourseTitle) VALUES ('87496', 'OnlineSyncronous', '2022-05-09 2022-05-12', 'W & T 13-15', 'French I', '$1200', '5.00', '18-08-2021', 'French II');
+INSERT INTO Courses (CourseID, Class_format, StartAndEndDate, Schedule, Perequisities, fee, numCredit, Registrationdeadline, CourseTitle) VALUES ('65495', 'OnlineAsyncronous', '2022-05-09 2022-15-12', 'W & T 13-15', 'German I', '$1000', '4.00', '13-08-2021', 'German II');
+
+CREATE TABLE Enrollment (EnrollmentID INT NOT NULL AUTO_INCREMENT,
+  CourseID INT NOT NULL,
+  Grade Varchar(8),
+  Schedule 
+  Semester Varchar(20),
+  PayRate DECIMAL (6, 2)
+  PRIMARY KEY (EnrollmentID),
+  Foreign Key (CourseID) REFERENCES Courses(CourseID)
+  ON DELETE CASCADE
+);
+
+INSERT INTO Enrollment (CourseID, Grade, Schedule, Semester, PayRate) VALUES ('15364', 'A+ 97', '')
+
+CREATE TABLE Students (StudentsID INT NOT NULL AUTO_INCREMENT,
+  EnrollmentID INT NOT NULL,
+  S_Name Varchar(80),
+  Email Varchar(80),
+  Phone_number Varchar(10),
+  EnrollmentDate Date,
+  PRIMARY KEY (StudentsID),
+  Foreign KEY (EnrollmentID) REFERENCES Enrollment(EnrollmentID)
+  ON DELETE CASCADE
+);
+
+CREATE TABLE CourseComponent (CoursecomponentID INT NOT NULL AUTO_INCREMENT,
+  StudentsID INT NOT NULL,
+  CourseID INT NOT NULL,
+  TutorialsAndLabsSections Varchar(12),
+  C_Hours Varchar(8),
+  Schedule Date,
+  PRIMARY KEY (CoursecomponentID),
+  Foreign KEY (StudentsID) REFERENCES Students(StudentsID),
+  Foreign Key (CourseID) REFERENCES Courses(CourseID)
+);
+
+CREATE TABLE Assistants (AssistantsID INT NOT NULL AUTO_INCREMENT,
+  CoursecomponentID INT NOT NULL,
+  A_Name Varchar(80),
+  A_PhoneNumber Varchar(10),
+  Email Varchar(80),
+  TypeLabAndTeacherAssistant Varchar(14),
+  PRIMARY KEY (AssistantsID),
+  FOREIGN KEY (CoursecomponentID) REFERENCES Courses(CourseID)
+  ON DELETE CASCADE
+);
+
+CREATE TABLE Department ( DepartmentID INT NOT NULL AUTO_INCREMENT,
+  CourseID INT NOT NULL,
+  Administrator Varchar(80),
+  Title Varchar(50),
+  PRIMARY KEY (DepartmentID),
+  FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+  ON DELETE CASCADE
+);
+
+CREATE TABLE Instructor (InstructorID INT NOT NULL AUTO_INCREMENT,
+  DepartmentID INT NOT NULL,
+  I_Name Varchar(80),
+  I_Email Varchar(80),
+  Phone_number Varchar(10),
+  PRIMARY KEY (InstructorID),
+  FOREIGN KEY (DepartmentID) REFERENCES Department(DepartmentID)
+  ON DELETE CASCADE
+);
+
+CREATE TABLE Certificate_Program (CertificateID INT NOT NULL AUTO_INCREMENT,
+  CourseID INT NOT NULL,
+  Schedule Date,
+  PRIMARY KEY (CertificateID),
+  FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+  ON DELETE CASCADE
+);
+
+

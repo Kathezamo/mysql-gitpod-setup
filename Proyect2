@@ -1,0 +1,105 @@
+CREATE DATABASE l;
+USE l;
+
+CREATE TABLE Courses (CourseID INT (5) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  Class_format ENUM ('OnlineSyncronous', 'OnlineAsynchronous', 'hybrid'),
+  StartDate Date NOT NULL,
+  EndDate DATE NOT NULL,
+  Schedule Varchar(20) NOT NULL,
+  Prerequisites Varchar(50) NOT NULL,
+  fee DECIMAL (6, 2) NOT NULL,
+  numCredit Varchar (2) NOT NULL,
+  Registration Varchar(16) NOT NULL,
+  CourseTitle Varchar(50) NOT NULL
+);
+
+ 
+INSERT INTO Courses (CourseID, Class_format, StartDate, EndDate, Schedule, Prerequisites , fee, numCredit, Registration, CourseTitle) VALUES ('45196', 'Hybrid', '2022-05-01', '2022-04-25', 'M & T 6:00 - 9:00', 'Linguistic Fundamentals', '806.52', '3', '13-12-2021', 'Applied linguistics');
+INSERT INTO Courses (CourseID, Class_format, StartDate, EndDate, Schedule, Prerequisites, fee, numCredit, Registration, CourseTitle) VALUES ('87496', 'OnlineSyncronous', '2022-05-09','2022-12-25', 'W & T 13:00 - 15:00', 'French I', '1225.63', '5', '18-08-2021', 'French II');
+INSERT INTO Courses (CourseID, Class_format, StartDate, EndDate, Schedule, Prerequisites, fee, numCredit, Registration, CourseTitle) VALUES ('85495', 'OnlineAsynchronous', '2022-05-09', '2022-12-15', 'W & T 18:00 - 20:00', 'German I', '1000.2', '4', '13-08-2021', 'German II');
+
+CREATE TABLE Enrollment (EnrollmentID INT (8) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  Grade Varchar(8) NOT NULL,
+  Schedule DATETIME NOT NULL,
+  Semester Varchar(20) NOT NULL,
+  PayRate DECIMAL (8, 2) NOT NULL
+);
+
+INSERT INTO Enrollment (EnrollmentID, Grade, Schedule, Semester, Payrate) VALUES ('54395726', 'B+ 87', '2022-05-02 09:00:25', '5th', '26002.32');
+INSERT INTO Enrollment (EnrollmentID, Grade, Schedule, Semester, Payrate) VALUES ('15695726', 'B+ 85', '2022-06-02 12:00:25', '3th', '75002.65');
+INSERT INTO Enrollment (EnrollmentID, Grade, Schedule, Semester, Payrate) VALUES ('78695726', 'C+ 77', '2022-06-02 12:00:25', '4th', '25002.32');
+
+CREATE TABLE Students (StudentsID INT (6) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  S_Name Varchar(80) NOT NULL,
+  Email Varchar(80) NOT NULL,
+  Phone_number Varchar(10) NOT NULL,
+  EnrollmentDate Date NOT NULL,
+  Gender Varchar (10),
+  Age INT DEFAULT 18,
+  CHECK (Age >=18)
+);
+
+INSERT INTO Students (StudentsID, S_Name, Email, Phone_number, EnrollmentDate, Gender, Age) Values ('458625', 'Cristian Zambrano', 'z-cristian68@ucalgary.ca', '8565944315', '2022-05-08', 'NULL', 25);
+INSERT INTO Students (StudentsID, S_Name, Email, Phone_number, EnrollmentDate, Gender, Age) Values ('758625', 'Laura Carranza', 'lc895@ucalgary.ca', '8255944315', '2022-08-08', 'F', 18);
+INSERT INTO Students (StudentsID, S_Name, Email, Phone_number, EnrollmentDate, Gender, Age) Values ('248625', 'Sheida Avendano', 'avezheida@ucalgary.ca', '8552584315', '2021-05-08', 'F', 33);
+
+CREATE TABLE CourseComponent (CoursecomponentID INT (10) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  TutorialsAndLabsSections ENUM('Tutorials sections', 'Labs sections'),
+  C_Hours Varchar(2) NOT NULL,
+  Schedule Varchar(20) NOT NULL
+);
+
+INSERT INTO CourseComponent (CoursecomponentID, TutorialsAndLabsSections, C_Hours, Schedule) VALUES ('589632589', 'Tutorials sections', '18', 'M & T 6:00 - 9:00');
+INSERT INTO CourseComponent (CoursecomponentID, TutorialsAndLabsSections, C_Hours, Schedule) VALUES ('569632589', 'Tutorials sections', '22', 'T & T 8:00 - 12:00');
+INSERT INTO CourseComponent (CoursecomponentID, TutorialsAndLabsSections, C_Hours, Schedule) VALUES ('689632589', 'Labs sections', '18', 'W & T 18:00 - 20:00');
+
+CREATE TABLE Assistants (AssistantsID INT (6) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  A_Name Varchar(80) NOT NULL,
+  A_PhoneNumber Varchar(10) NOT NULL,
+  Email Varchar(80) NOT NULL,
+  TypeLabAndTeacherAssistant ENUM('Lab Assistant', 'Teacher Assistant')
+);
+
+INSERT INTO Assistants (AssistantsID, A_Name, A_PhoneNumber, Email, TypeLabAndTeacherAssistant) VALUES ('485963', 'Isabella Forenz', '8659456352', 'fz-isabella@ucalgary.ca', 'Lab Assistant');
+INSERT INTO Assistants (AssistantsID, A_Name, A_PhoneNumber, Email, TypeLabAndTeacherAssistant) VALUES ('456963', 'Shannon Laurenz', '8859456352', 'sh-ia@ucalgary.ca', 'eacher Assistant');
+INSERT INTO Assistants (AssistantsID, A_Name, A_PhoneNumber, Email, TypeLabAndTeacherAssistant) VALUES ('489963', 'Julio Morales', '8657856352', 'morales-julio@ucalgary.ca', 'Lab Assistant');
+
+CREATE TABLE Department ( DepartmentID INT (9) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+
+  Administrator Varchar(80) NOT NULL,
+  Title Varchar(50) NOT NULL,
+  street Varchar (20),
+  Postal_code Varchar(6) NOT NULL
+);
+
+INSERT INTO Department (DepartmentID, Administrator, Title, street, Postal_code) VALUES ('536984569', 'Lorenzo Skival', 'Architecture', 'NULL', 'T2L2E7');
+INSERT INTO Department (DepartmentID, Administrator, Title, street, Postal_code) VALUES ('656984569', 'Isabella Smith', 'Business', '4216 Brisebois DR', 'T2L2E7');
+INSERT INTO Department (DepartmentID, Administrator, Title, street, Postal_code) VALUES ('786984569', 'Fernando Yates', 'Linguistic', '4516 ', 'T2L2E7');
+
+CREATE TABLE Instructor (InstructorID INT(10) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  I_Name Varchar(80) NOT NULL,
+  I_Email Varchar(80) NOT NULL,
+  Phone_number Varchar(10) NOT NULL
+);
+
+INSERT INTO Instructor (InstructorID, I_Name, I_Email, Phone_number) VALUES ('456325698', 'Laura Smith', 's_smith@ucalgary.ca', '8566854245');
+INSERT INTO Instructor (InstructorID, I_Name, I_Email, Phone_number) VALUES ('786325698', 'Robin Yates', 'yatesrobin@ucalgary.ca', '8566854245');
+INSERT INTO Instructor (InstructorID, I_Name, I_Email, Phone_number) VALUES ('636325698', 'Jim Dewald', 'j-dewaldh@ucalgary.ca', '8566854245');
+
+CREATE TABLE Certificate_Program (CertificateID INT (6) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  Title Varchar(20) NOT NULL,
+  C_StartDate Date,
+  C_EndDate Date
+);
+
+INSERT INTO Certificate_Program (Title, C_StartDate, C_EndDate) VALUES ('Business Analytics', '2020-05-08', '2022-03-02');
+INSERT INTO Certificate_Program (Title, C_StartDate, C_EndDate) VALUES ('Project management', '2018-08-08', '2022-03-02');
+INSERT INTO Certificate_Program (Title, C_StartDate, C_EndDate) VALUES ('Digital Marketing', '2016-05-08', '2022-03-02');
+
+
+
+
+
+
+
+

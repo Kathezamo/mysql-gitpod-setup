@@ -1,0 +1,201 @@
+CREATE DATABASE project_2;
+USE project_2;
+
+CREATE TABLE Certificate_Program (CertificateID INT (6) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  CP_Title Varchar (20) NOT NULL,
+  CP_StartDate Date,
+  CP_EndDate Date
+);
+
+INSERT INTO Certificate_Program (CertificateID, CP_Title, CP_StartDate, CP_EndDate) VALUES ('785964','Business Analytics', '2020-05-08', '2022-03-02');
+INSERT INTO Certificate_Program (CertificateID, CP_Title, CP_StartDate, CP_EndDate) VALUES ('856914', 'Project management', '2018-08-08', '2022-03-02');
+INSERT INTO Certificate_Program (CertificateID, CP_Title, CP_StartDate, CP_EndDate) VALUES ('459862', 'Digital Marketing', '2016-05-08', '2022-03-02');
+
+
+CREATE TABLE Department ( DepartmentID INT (9) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+
+  Administrator Varchar(80) NOT NULL,
+  D_Title Varchar(50) NOT NULL,
+  D_street Varchar (20),
+  D_Postal_code Varchar(6) NOT NULL
+);
+
+INSERT INTO Department (DepartmentID, Administrator, D_Title, D_street, D_Postal_code) VALUES ('536984569', 'Lorenzo Skival', 'Architecture', 'NULL', 'T2L2E7');
+INSERT INTO Department (DepartmentID, Administrator, D_Title, D_street, D_Postal_code) VALUES ('656984569', 'Isabella Smith', 'Business', '4216 Brisebois DR', 'T2L2E7');
+INSERT INTO Department (DepartmentID, Administrator, D_Title, D_street, D_Postal_code) VALUES ('786984569', 'Fernando Yates', 'Linguistic', '4516 ', 'T2L2E7');
+
+
+CREATE TABLE Courses (Course_ID INT (5) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  fk_CertificateID INT (6), 
+  fk_DepartmentID INT (9),
+  Class_format ENUM ('OnlineSyncronous', 'OnlineAsynchronous', 'hybrid'),
+  C_StartDate Date NOT NULL,
+  C_EndDate DATE NOT NULL,
+  C_Schedule Varchar(20) NOT NULL,
+  C_Prerequisites Varchar(50),
+  C_fee DECIMAL (6, 2) NOT NULL,
+  C_numCredit Varchar (2) NOT NULL,
+  C_Registration Varchar(16) NOT NULL,
+  CourseTitle Varchar(50) NOT NULL,
+  FOREIGN KEY (fk_CertificateID)
+    REFERENCES Certificate_Program (CertificateID)
+    ON DELETE CASCADE,
+  FOREIGN KEY (fk_DepartmentID) 
+    REFERENCES Department (DepartmentID)
+    ON DELETE CASCADE
+);
+
+ 
+
+INSERT INTO Courses (fk_CertificateID, fk_DepartmentID, Course_ID, Class_format, C_StartDate, C_EndDate, C_Schedule, C_Prerequisites, C_fee, C_numCredit, C_Registration, CourseTitle) VALUES ('469862', '726983569', '85415', 'OnlineAsynchronous', '2022-06-09', '2022-12-15', 'W & T 18:00 - 20:00', 'Italian I', '1000.2', '4', '13-08-2021', 'ItalianII');
+INSERT INTO Courses (fk_CertificateID, fk_DepartmentID, Course_ID, Class_format, C_StartDate, C_EndDate, C_Schedule, C_Prerequisites, C_fee, C_numCredit, C_Registration, CourseTitle) VALUES ('856914', '656984569', '87496', 'OnlineSyncronous', '2022-05-09','2022-12-25', 'W & T 13:00 - 15:00', 'French I', '1225.63', '5', '18-08-2021', 'French II');
+INSERT INTO Courses (fk_CertificateID, fk_DepartmentID, Course_ID, Class_format, C_StartDate, C_EndDate, C_Schedule, C_Prerequisites, C_fee, C_numCredit, C_Registration, CourseTitle) VALUES ('459862', '786984569', '85495', 'OnlineAsynchronous', '2022-05-09', '2022-12-15', 'W & T 18:00 - 20:00', 'German I', '1000.2', '4', '13-08-2021', 'German II');
+
+SELECT * FROM Certificate_Program INNER JOIN Courses ON Certificate_Program.CertificateID=Courses.fk_CertificateID;
+SELECT * FROM Certificate_Program, Courses WHERE Certificate_Program.CertificateID=Courses.fk_CertificateID;
+
+
+CREATE TABLE CourseComponent (CoursecomponentID INT(10) NOT NULL AUTO_INCREMENT,
+  fk_Course_ID INT (5) NOT NULL,
+  TutorialsAndLabsSections ENUM('Tutorials sections', 'Labs sections'),
+  CC_Hours Varchar(8) NOT NULL,
+  CC_Schedule Varchar(20) NOT NULL,
+  PRIMARY KEY (CoursecomponentID),
+  Foreign Key (fk_Course_ID) REFERENCES Courses(Course_ID)
+    ON DELETE CASCADE
+);
+
+
+INSERT INTO CourseComponent (fk_Course_ID, CoursecomponentID, TutorialsAndLabsSections, CC_Hours, CC_Schedule) VALUES ('45196', '589632589', 'Tutorials sections', '18', 'M & T 6:00 - 9:00');
+INSERT INTO CourseComponent (fk_Course_ID, CoursecomponentID, TutorialsAndLabsSections, CC_Hours, CC_Schedule) VALUES ('87496', '569632589', 'Tutorials sections', '22', 'T & T 8:00 - 12:00');
+INSERT INTO CourseComponent (fk_Course_ID, CoursecomponentID, TutorialsAndLabsSections, CC_Hours, CC_Schedule) VALUES ('85495', '689632589', 'Labs sections', '18', 'W & T 18:00 - 20:00');
+
+SELECT * FROM Courses INNER JOIN CourseComponent ON Courses.Course_ID=CourseComponent.fk_Course_ID; 
+SELECT * FROM Courses, CourseComponent WHERE Courses.Course_ID=CourseComponent.fk_Course_ID;
+
+CREATE TABLE Assistants (AssistantsID INT (6) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  fk_CoursecomponentID INT (10) NOT NULL,
+  A_Name Varchar(80) NOT NULL,
+  A_PhoneNumber Varchar(10) NOT NULL,
+  A_Email Varchar(80) NOT NULL,
+  TypeLabAndTeacherAssistant ENUM('Lab Assistant', 'Teacher Assistant'),
+  FOREIGN KEY (fk_CoursecomponentID) REFERENCES Courses(Course_ID)
+  ON DELETE CASCADE
+);
+
+INSERT INTO Assistants (fk_CoursecomponentID, AssistantsID, A_Name, A_PhoneNumber, A_Email, TypeLabAndTeacherAssistant) VALUES ('589632589', '485963', 'Isabella Forenz', '8659456352', 'fz-isabella@ucalgary.ca', 'Lab Assistant');
+INSERT INTO Assistants (fk_CoursecomponentID, AssistantsID, A_Name, A_PhoneNumber, A_Email, TypeLabAndTeacherAssistant) VALUES ('569632589', '456963', 'Shannon Laurenz', '8859456352', 'sh-ia@ucalgary.ca', 'Teacher Assistant');
+INSERT INTO Assistants (fk_CoursecomponentID, AssistantsID, A_Name, A_PhoneNumber, A_Email, TypeLabAndTeacherAssistant) VALUES ('689632589', '489963', 'Julio Morales', '8657856352', 'morales-julio@ucalgary.ca', 'Lab Assistant');
+ 
+SELECT * FROM CourseComponent INNER JOIN Assistant ON Coursecomponent.CoursecomponentID=Assistant.fk_CoursecomponentID;  
+SELECT * FROM CourseComponent, Assistants WHERE Coursecomponent.CoursecomponentID=Assistant.fk_CoursecomponentID;
+
+CREATE TABLE Students (StudentsID INT (6) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  fk_CoursecomponentID INT NOT NULL,
+  S_Name Varchar(80) NOT NULL,
+  S_Email Varchar(80) NOT NULL,
+  S_Phone_number Varchar(10) NOT NULL,
+  S_EnrollmentDate Date NOT NULL,
+  S_Gender Varchar (10),
+  S_Age INT DEFAULT 18,
+  CHECK (S_Age >=18),
+  PRIMARY KEY (StudentsID),
+  Foreign KEY (fk_CoursecomponentID) REFERENCES CourseComponent(CoursecomponentID)
+  ON DELETE CASCADE
+);
+ 
+INSERT INTO Students (fk_CoursecomponentID , StudentsID, S_Name, S_Email, S_Phone_number, S_EnrollmentDate, S_Gender, S_Age) Values ('589632589', '458625', 'Cristian Zambrano', 'z-cristian68@ucalgary.ca', '8565944315', '2022-05-08', 'NULL', 25);
+INSERT INTO Students (fk_CoursecomponentID , StudentsID, S_Name, S_Email, S_Phone_number, S_EnrollmentDate, S_Gender, S_Age) Values ('569632589', '758625', 'Laura Carranza', 'lc895@ucalgary.ca', '8255944315', '2022-08-08', 'F', 18);
+INSERT INTO Students (fk_CoursecomponentID , StudentsID, S_Name, S_Email, S_Phone_number, S_EnrollmentDate, S_Gender, S_Age) Values ('689632589', '248625', 'Sheida Avendano', 'avezheida@ucalgary.ca', '8552584315', '2021-05-08', 'F', 33);
+
+SELECT * FROM CourseComponent INNER JOIN Students ON Coursecomponent.CoursecomponentID=Students.fk_CoursecomponentID;  
+SELECT * FROM CourseComponent, Students WHERE Coursecomponent.CoursecomponentID=Students.fk_CoursecomponentID;
+
+
+CREATE TABLE Enrollment (EnrollmentID INT (8) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  fk_CourseID INT NOT NULL,
+  fk_studentID INT NOT  NULL,
+  E_Grade Varchar(8) NOT NULL,
+  E_Schedule DATETIME NOT NULL,
+  E_Semester Varchar(20) NOT NULL,
+  E_PayRate DECIMAL (8, 2) NOT NULL,
+  PRIMARY KEY (EnrollmentID),
+  Foreign Key (fk_CourseID) REFERENCES Courses(CourseID)
+  ON DELETE CASCADE
+);
+ 
+INSERT INTO Enrollment (fk_Course_ID, EnrollmentID, E_Grade, E_Schedule, E_Semester, E_Payrate) VALUES ('45196', '54395726', 'B+ 87', '2022-05-02 09:00:25', '5th', '26002.32');
+INSERT INTO Enrollment (fk_Course_ID, EnrollmentID, E_Grade, E_Schedule, E_Semester, E_Payrate) VALUES ('87496', '15695726', 'B+ 85', '2022-06-02 12:00:25', '3th', '75002.65');
+INSERT INTO Enrollment (fk_Course_ID, EnrollmentID, E_Grade, E_Schedule, E_Semester, E_Payrate) VALUES ('85495', '78695726', 'C+ 77', '2022-06-02 12:00:25', '4th', '25002.32');
+
+SELECT * FROM Courses INNER JOIN Enrollment ON Courses.Course_ID= Enrollment.fk_course_ID;  
+SELECT * FROM Courses, Enrollment WHERE Courses.Course_ID =Enrollment.fk_course_ID;
+
+CREATE TABLE Instructor (InstructorID INT(10) NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
+  fk_DepartmentID INT (10) NOT NULL, 
+  I_Name Varchar(80) NOT NULL,
+  I_Email Varchar(80) NOT NULL,
+  I_Phone_number Varchar(10) NOT NULL,
+  PRIMARY KEY (InstructorID),
+  FOREIGN KEY (fk_DepartmentID) REFERENCES Department(DepartmentID)
+  ON DELETE CASCADE
+);
+ 
+INSERT INTO Instructor (fk_DepartmentID, InstructorID, I_Name, I_Email, I_Phone_number) VALUES ('2549856659', '456325698', 'Laura Smith', 's_smith@ucalgary.ca', '8566854245');
+INSERT INTO Instructor (fk_DepartmentID, InstructorID, I_Name, I_Email, I_Phone_number) VALUES ('4894894895','786325698', 'Robin Yates', 'yatesrobin@ucalgary.ca', '8566854245');
+INSERT INTO Instructor (fk_DepartmentID, InstructorID, I_Name, I_Email, I_Phone_number) VALUES ('5494984984', '636325698', 'Jim Dewald', 'j-dewaldh@ucalgary.ca', '8566854245');
+
+SELECT * FROM Department INNER JOIN Instructor ON Department.DepartmentID=Instructor.fk_DepartmentID;  
+SELECT * FROM Department, Instructor WHERE Department.DepartmentID =Instructor.fk_DepartmentID;
+
+SELECT * FROM Department AS Table1
+   JOIN CoursesOn Department.DepartmentID=Course.fk_DepartmentID;
+   JOIN Department.DepartmentID=Instructor.fk_DepartmentID;
+
+
+SELECT FROM Instructors AS TABLE_1
+JOIN Department 
+ 	ON Instructors.InstructorID=Department.fk_DepartmentID;
+ 
+SELECT FROM Courses AS TABLE_2
+	JOIN TABLE_1
+	ON Courses.Course_ID=Enrollment.fk_EnrollmentID;
+ 
+SELECT FROM Enrollment AS FINAL_TABLE
+	JOIN TABLE_3
+	ON Enrollment.EnrollmentID = Students.fk_StudentsID;
+ 
+SELECT COUNT(*) FROM FINALTABLE
+JOIN TABLE_2 ON STUDENTS.StudentsID=Instructor.FK_instructorID;
+
+
+SELECT CourseTitle, C_Schedule
+ From Courses INNER JOIN Enrollment ON Courses.Course_ID = Enrollment.Course_ID 
+ WHERE Enrollment = 1
+ ORDER BY CourseTitle;
+
+SELECT I_Name,
+FROM instructors
+INNER JOIN assistants
+USING(TypeLabAndTeacherAssistant)
+INNER JOIN Courses
+USING(C_Hours);
+
+
+UPDATE
+    assistants
+SET
+    TypeLabAndTeacherAssistant = REPLACE(TypeLabAndTeacherAssistant,'Lab Assistant','Course Assitant')
+WHERE
+    TypeLabAndTeacherAssistant IS NOT NULL;
+
+
+UPDATE
+    Department
+SET
+    Course_ID = REPLACE(COURSE_ID'256895','14785')
+WHERE
+    CourseID IS NOT NULL;
+
+DELETE FROM Courses
+WHERE Course_ID = '45196';
